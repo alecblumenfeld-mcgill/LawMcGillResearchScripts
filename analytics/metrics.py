@@ -6,16 +6,16 @@ __author__ = 'Alec'
 
 
 # takes dictonary files of years and produces articles published
-def productivityPerYear(entries):
-    for key, values in entries.items():
+def productivityPerYear(years):
+    for key, values in years.items():
         print(key, ":", len(values.entries))
         pass
     pass
 
 
 #takes dictonary files of years and produces articles published
-def productivityPerYearProRated(entries):
-    for key, values in entries.items():
+def productivityPerYearProRated(years):
+    for key, values in years.items():
         authors = getAuthors(values.entries)
         print("productivity Per Year (ProRated)", key, ":", len(values.entries) / len(authors))
         pass
@@ -119,8 +119,9 @@ def collectiveHIndexByYear(entries):
 
 def mostUsedPublishers(entries):
     publishers =[]
-    for x in entries:
-        publishers.append(x.outlet)
+    for x,y in entries.items():
+        for entry in y.entries:
+            publishers.append(entry.outlet)
         pass
     publishers = Counter(publishers).most_common(6)
     for publisher, count in publishers:

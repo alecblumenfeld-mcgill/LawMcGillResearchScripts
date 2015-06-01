@@ -1,6 +1,7 @@
 import itertools
 import operator
 import collections
+import sys
 from metrics import *
 __author__ = 'Alec'
 from xlrd import open_workbook
@@ -157,5 +158,65 @@ if __name__ == '__main__':
     authors = getAuthors(entries)
     years = getYears(entries)
 
+    def getProductivityPerYear():
+        productivityPerYear(years)
+
+    def getProductivityPerYearProRated():
+        productivityPerYearProRated(years)
+
+    def getpercentLangPerYear():
+        percentLangPerYear(years)
+
+    def getPercentCoAuthoredperYear():
+        percentCoAuthoredperYear(years)
+
+    def getCoAuthoredTypePerYear():
+        CoAuthoredTypePerYear(years)
+
+    def getCollectiveHIndexByYear():
+        collectiveHIndexByYear(years)
+
+    def getMostUsedPublishers():
+        mostUsedPublishers(years)
+
+    def getPercentRegionPerYear():
+        percentRegionPerYear(years)
+
+    def getPercentPerOutlettypePertime():
+        percentPerOutlettypePertime(years)
+    def quit():
+         sys.exit(0)
+
+
+
+    options = {0 : getProductivityPerYear,
+           1 : getProductivityPerYearProRated,
+           2 : getpercentLangPerYear,
+           3 : getPercentCoAuthoredperYear,
+           4 : getCoAuthoredTypePerYear,
+           5 : getCollectiveHIndexByYear,
+           6 : getMostUsedPublishers,
+           7 : getPercentRegionPerYear,
+           8 : getPercentPerOutlettypePertime,
+           9 : quit
+        }
+
+    while True:
+        print("""
+0 : Productivity Per Year
+1 : Productivity Per Year (Pro-Rated)
+2 : Percent Language Per Year
+3 : Percent CoAuthored Per Year
+4 : Percent CoAuthored Type Per Year
+5 : Collective H-Index By Year
+6 : Most Used Publishers
+7 : Percent for each Region Per Year,
+8 : Percent Per Outlet Type Per Year
+9 :  Quit\n""")
+        num = int(input("enter A Selection:"))
+        options[num]()
+        temp = input("press enter to select another option")
+
     #print(mostUsedPublishers(entries))
+
     print(percentPerOutlettypePertime(years))
