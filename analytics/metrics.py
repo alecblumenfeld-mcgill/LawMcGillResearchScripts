@@ -108,12 +108,12 @@ def hindex(references):
     #     m = float(h) / Yrange
     # except ZeroDivisionError:
     #     m = float("inf")
-    print(h)
+    return(h)
 
 
 def collectiveHIndexByYear(entries):
     for key, values in entries.items():
-        hindex(values.entries)
+        print("{0}: {1}".format(key,hindex(values.entries)))
 
     pass
 
@@ -149,6 +149,33 @@ def percentPerOutlettypePertime(entries):
         journalTypes = getJournalTypes(values.entries)
         toRet += key + ": "
         for type, result in journalTypes.items():
+            percent = str("%.2f" % ((len(result.entries) / len(values.entries)) * 100))
+            toRet += type + " " + str(percent) + "% ,"
+        pass
+        toRet += '\n'
+    print(toRet)
+    pass
+
+
+def PercentPerOutletLangPertime(entries):
+    toRet = ""
+    for key, values in entries.items():
+        journalLangs = getJournalLangs(values.entries)
+        toRet += key + ": "
+        for type, result in journalLangs.items():
+            percent = str("%.2f" % ((len(result.entries) / len(values.entries)) * 100))
+            toRet += type + " " + str(percent) + "% ,"
+        pass
+        toRet += '\n'
+    print(toRet)
+    pass
+
+def percentTopicPerYear(entries):
+    toRet = ""
+    for key, values in entries.items():
+        journalLangs = getTopics(values.entries)
+        toRet += key + ": "
+        for type, result in journalLangs.items():
             percent = str("%.2f" % ((len(result.entries) / len(values.entries)) * 100))
             toRet += type + " " + str(percent) + "% ,"
         pass

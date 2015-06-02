@@ -1,3 +1,4 @@
+
 import itertools
 import operator
 import collections
@@ -27,6 +28,15 @@ class journalType:
     def __init__(self, type):
         self.lang = type;
         self.entries = []
+class outletLang:
+    def __init__(self, outletLang):
+        self.lang = outletLang;
+        self.entries = []
+
+class topic:
+    def __init__(self, topic):
+        self.topic = topic;
+        self.entries = []
 class entry:
     def __init__(self, publication, author, year, lang, publicationType, coAuthor, coAuthorRelation, outlet, outletType,
                  outletReg, outletLang, journalType, lawType, publicationField, keyword, citations,row):
@@ -47,7 +57,7 @@ class entry:
         self.outletLang = outletLang
         self.journalType = journalType
         self.lawType = lawType
-        self.publicationField = publicationField
+        self.topic = publicationField
         self.keyword = keyword.split(',')
         try:
             self.citations = int(citations)
@@ -58,7 +68,7 @@ class entry:
 
 def getEntries():
     entries = []
-    workbook = open_workbook('RO Analytics Data.xlsx')
+    workbook = open_workbook('RO analytics june 2nd 11am.xlsx')
     for s in workbook.sheets():
         for row in range(1, s.nrows):
 
@@ -150,6 +160,36 @@ def getJournalTypes(entries):
             pass
     return collections.OrderedDict(sorted(journalTypes.items()))
 
+def getJournalLangs(entries):
+
+    outletLangs = {}
+    for x in entries:
+
+        try:
+            outletLangs[x.outletLang].entries.append(x)
+
+            pass
+        except :
+            outletLangs[x.outletLang] = outletLang(x.outletLang)
+            outletLangs[x.outletLang].entries.append(x)
+            pass
+    return collections.OrderedDict(sorted(outletLangs.items()))
+
+def getTopics(entries):
+
+    topics = {}
+    for x in entries:
+
+        try:
+            topics[x.topic].entries.append(x)
+
+            pass
+        except :
+            topics[x.topic] = topic(x.topic)
+            topics[x.topic].entries.append(x)
+            pass
+    return collections.OrderedDict(sorted(topics.items()))
+
 
 
 
@@ -184,6 +224,12 @@ if __name__ == '__main__':
 
     def getPercentPerOutlettypePertime():
         percentPerOutlettypePertime(years)
+
+    def getPercentPerOutletLangPertime():
+        PercentPerOutletLangPertime(years)
+
+    def getpercentTopicPerYear():
+        percentTopicPerYear(years)
     def quit():
          sys.exit(0)
 
@@ -198,7 +244,9 @@ if __name__ == '__main__':
            6 : getMostUsedPublishers,
            7 : getPercentRegionPerYear,
            8 : getPercentPerOutlettypePertime,
-           9 : quit
+           9 : getPercentPerOutletLangPertime,
+           10: getpercentTopicPerYear,
+           11 : quit
         }
 
     while True:
@@ -212,10 +260,12 @@ if __name__ == '__main__':
 6 : Most Used Publishers
 7 : Percent for each Region Per Year,
 8 : Percent Per Outlet Type Per Year
-9 :  Quit\n""")
-        num = int(input("enter A Selection:"))
+9 : Percent Per Outlet Language Per Year
+10: Percent Per Outlet Language Per Year
+11: Quit\n""")
+        num = int(input("Please Enter A Selection:"))
         options[num]()
-        temp = input("press enter to select another option")
+        temp = input("Press Enter to Select Another Option")
 
     #print(mostUsedPublishers(entries))
 

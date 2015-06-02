@@ -10,25 +10,29 @@ sh = output.add_sheet("output",cell_overwrite_ok=True)
 
 
 querier = ScholarQuerier()
-
-workbook = open_workbook('testforscraper.xlsx')
+workbookName= "RO Analytics data FINAL"
+workbook = open_workbook(workbookName+'.xlsx')
 
 for s in workbook.sheets():
     print 'Sheet:',s.name
     print s.nrows
+    yeild =0
     for row in range( s.nrows):
         for col in range(s.ncols):
             sh.write(row, col, s.cell(row,col).value)
         citationValue= s.cell(row,15).value
-        if citationValue == "":
+        if citationValue == "" or citationValue=="None in google":
             query = SearchScholarQuery()
             query.set_author(s.cell(row,1).value)
-            query.set_words(s.cell(row,0).value)
+            query.set_words_some(s.cell(row,0).value)
             query.set_num_page_results(1)
+            query.set_scope(True)
             querier.send_query(query)
+
             try:
                 print querier.articles[0].attrs.get("num_citations")[0]
                 sh.write(row, 15, querier.articles[0].attrs.get("num_citations")[0])
+                yeild +=1
             except:
                 sh.write(row, 15, "None in google")
 
@@ -36,10 +40,11 @@ for s in workbook.sheets():
                 pass
 
         else:
+            yeild +=1
             print citationValue
 
-
-output.save("testforscraper_citations_updated.xls")
+print yeild
+output.save(workbookName+"_Updated"+".xlsx")
 
 
 
