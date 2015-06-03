@@ -17,13 +17,20 @@ for s in workbook.sheets():
     print 'Sheet:',s.name
     print s.nrows
     yeild =0
-    for row in range( s.nrows):
+    for row in   reversed(xrange(s.nrows)):
         for col in range(s.ncols):
             sh.write(row, col, s.cell(row,col).value)
         citationValue= s.cell(row,15).value
         if citationValue == "" or citationValue=="None in google":
             query = SearchScholarQuery()
-            query.set_author(s.cell(row,1).value)
+            try:
+                query.set_author((s.cell(row,1).value).split(" ")[1])
+                pass
+            except:
+                 query.set_author((s.cell(row,1).value))
+                
+            
+            
             query.set_words_some(s.cell(row,0).value)
             query.set_num_page_results(1)
             query.set_scope(True)

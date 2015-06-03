@@ -2,6 +2,7 @@ from xlsParse import *
 import math, datetime
 import statistics
 from collections import Counter
+
 __author__ = 'Alec'
 
 
@@ -13,7 +14,7 @@ def productivityPerYear(years):
     pass
 
 
-#takes dictonary files of years and produces articles published
+# takes dictonary files of years and produces articles published
 def productivityPerYearProRated(years):
     for key, values in years.items():
         authors = getAuthors(values.entries)
@@ -42,7 +43,6 @@ def percentCoAuthoredperYear(entries):
     toRet = ""
 
     for key, values in entries.items():
-        toRet += key + ": "
         Y = 0
         N = 0
         for entry in values.entries:
@@ -95,37 +95,27 @@ def hindex(references):
         if n < h:
             h = h - 1
             break
-    # citations = statistics.Statistics([r.citations for r in references])
-    # if years:
-    #     Yrange = statistics.Statistics(years).range
-    # else:
-    #     Yrange = 0
-    # try:
-    #     a = citations.sum / math.pow(h, 2)
-    # except ZeroDivisionError:
-    #     a = float("inf")
-    # try:
-    #     m = float(h) / Yrange
-    # except ZeroDivisionError:
-    #     m = float("inf")
-    return(h)
+
+    return (h)
 
 
 def collectiveHIndexByYear(entries):
     for key, values in entries.items():
-        print("{0}: {1}".format(key,hindex(values.entries)))
+        print("{0}: {1}".format(key, hindex(values.entries)))
 
     pass
 
+
 def mostUsedPublishers(entries):
-    publishers =[]
-    for x,y in entries.items():
+    publishers = []
+    for x, y in entries.items():
         for entry in y.entries:
             publishers.append(entry.outlet)
         pass
     publishers = Counter(publishers).most_common(6)
     for publisher, count in publishers:
-        print('%s : %d'%(publisher, count))
+        print('%s : %d' % (publisher, count))
+
 
 #perccent per region peryear
 
@@ -141,6 +131,8 @@ def percentRegionPerYear(entries):
         toRet += '\n'
     print(toRet)
     pass
+
+
 #perccent co authored peryear
 
 def percentPerOutlettypePertime(entries):
@@ -170,6 +162,7 @@ def PercentPerOutletLangPertime(entries):
     print(toRet)
     pass
 
+
 def percentTopicPerYear(entries):
     toRet = ""
     for key, values in entries.items():
@@ -178,6 +171,27 @@ def percentTopicPerYear(entries):
         for type, result in journalLangs.items():
             percent = str("%.2f" % ((len(result.entries) / len(values.entries)) * 100))
             toRet += type + " " + str(percent) + "% ,"
+        pass
+        toRet += '\n'
+    print(toRet)
+    pass
+
+
+def citationsperTopicperYear(entries):
+    toRet = ""
+
+    for key, values in entries.items():
+        journalLangs = getTopics(values.entries)
+        toRet += key + ": "
+        for type, result in journalLangs.items():
+            sum=0
+            for x in result.entries:
+                try:
+                    sum= sum+ x.citations
+                except:
+                    pass
+
+            toRet += type + " " + str(sum) + ","
         pass
         toRet += '\n'
     print(toRet)

@@ -230,6 +230,9 @@ if __name__ == '__main__':
 
     def getpercentTopicPerYear():
         percentTopicPerYear(years)
+
+    def getCitationsperTopicperYear():
+        citationsperTopicperYear(years)
     def quit():
          sys.exit(0)
 
@@ -246,7 +249,8 @@ if __name__ == '__main__':
            8 : getPercentPerOutlettypePertime,
            9 : getPercentPerOutletLangPertime,
            10: getpercentTopicPerYear,
-           11 : quit
+           11: getCitationsperTopicperYear,
+           12 : quit
         }
 
     while True:
@@ -262,7 +266,8 @@ if __name__ == '__main__':
 8 : Percent Per Outlet Type Per Year
 9 : Percent Per Outlet Language Per Year
 10: Percent Per Outlet Language Per Year
-11: Quit\n""")
+11: citation per topic per year
+12: Quit\n""")
         num = int(input("Please Enter A Selection:"))
         options[num]()
         temp = input("Press Enter to Select Another Option")
