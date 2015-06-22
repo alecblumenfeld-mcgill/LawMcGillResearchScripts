@@ -57,7 +57,7 @@ class entry:
         self.outletLang = outletLang
         self.journalType = journalType
         self.lawType = lawType
-        self.topic = publicationField
+        self.topic = "{"+publicationField+"}"
         self.keyword = keyword.split(',')
         try:
             self.citations = int(citations)
@@ -68,7 +68,7 @@ class entry:
 
 def getEntries():
     entries = []
-    workbook = open_workbook('RO analytics june 2nd 11am.xlsx')
+    workbook = open_workbook('RO Analytics data FINAL without citations.xlsx')
     for s in workbook.sheets():
         for row in range(1, s.nrows):
 
@@ -149,15 +149,32 @@ def getJournalTypes(entries):
 
     journalTypes = {}
     for x in entries:
+        if(x.outletType=="Journal"):
+            try:
+                journalTypes[x.journalType].entries.append(x)
 
-        try:
-            journalTypes[x.journalType].entries.append(x)
+                pass
+            except :
+                journalTypes[x.journalType] = journalType(x.journalType)
+                journalTypes[x.journalType].entries.append(x)
+                pass
+        pass
+    return collections.OrderedDict(sorted(journalTypes.items()))
 
-            pass
-        except :
-            journalTypes[x.journalType] = journalType(x.journalType)
-            journalTypes[x.journalType].entries.append(x)
-            pass
+def getPublishers(entries):
+
+    journalTypes = {}
+    for x in entries:
+        if(x.outletType=="Journal"):
+            try:
+                journalTypes[x.outlet].entries.append(x)
+
+                pass
+            except :
+                journalTypes[x.outlet] = journalType(x.outlet)
+                journalTypes[x.outlet].entries.append(x)
+                pass
+        pass
     return collections.OrderedDict(sorted(journalTypes.items()))
 
 def getJournalLangs(entries):
@@ -190,8 +207,37 @@ def getTopics(entries):
             pass
     return collections.OrderedDict(sorted(topics.items()))
 
+def getOutletType(entries):
+
+    topics = {}
+    for x in entries:
+
+        try:
+            topics[x.outletType].entries.append(x)
+
+            pass
+        except :
+            topics[x.outletType] = topic(x.outletType)
+            topics[x.outletType].entries.append(x)
+            pass
+    return collections.OrderedDict(sorted(topics.items()))
 
 
+def getTopicsSum(topics):
+    sum =0
+    for x,y in topics.items():
+        sum+=len(y.entries)
+        pass
+
+    return sum
+
+def getJournalSum(topics):
+    sum =0
+    for x,y in topics.items():
+        sum+=len(y.entries)
+        pass
+
+    return sum
 
 if __name__ == '__main__':
     entries = getEntries()
@@ -217,7 +263,7 @@ if __name__ == '__main__':
         collectiveHIndexByYear(years)
 
     def getMostUsedPublishers():
-        mostUsedPublishers(years)
+        mostUsedPublishers(entries)
 
     def getPercentRegionPerYear():
         percentRegionPerYear(years)
@@ -236,7 +282,7 @@ if __name__ == '__main__':
     def quit():
          sys.exit(0)
 
-
+    citationsperLaunguage(entries)
 
     options = {0 : getProductivityPerYear,
            1 : getProductivityPerYearProRated,

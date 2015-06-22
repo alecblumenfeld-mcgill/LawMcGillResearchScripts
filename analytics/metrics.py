@@ -66,6 +66,7 @@ def CoAuthoredTypePerYear(entries):
         F = 0
         NF = 0
         S = 0
+
         for entry in values.entries:
             if (entry.coAuthor):
                 Y += 1
@@ -108,11 +109,11 @@ def collectiveHIndexByYear(entries):
 
 def mostUsedPublishers(entries):
     publishers = []
-    for x, y in entries.items():
-        for entry in y.entries:
-            publishers.append(entry.outlet)
+
+    for entry in 6entries:
+        publishers.append(entry.outlet)
         pass
-    publishers = Counter(publishers).most_common(6)
+    publishers = Counter(publishers).most_common(10)
     for publisher, count in publishers:
         print('%s : %d' % (publisher, count))
 
@@ -139,9 +140,10 @@ def percentPerOutlettypePertime(entries):
     toRet = ""
     for key, values in entries.items():
         journalTypes = getJournalTypes(values.entries)
+        sum=getJournalSum(journalTypes)
         toRet += key + ": "
         for type, result in journalTypes.items():
-            percent = str("%.2f" % ((len(result.entries) / len(values.entries)) * 100))
+            percent = str("%.2f" % ((len(result.entries) / sum) * 100))
             toRet += type + " " + str(percent) + "% ,"
         pass
         toRet += '\n'
@@ -167,12 +169,16 @@ def percentTopicPerYear(entries):
     toRet = ""
     for key, values in entries.items():
         journalLangs = getTopics(values.entries)
+        sum = getTopicsSum(journalLangs)
         toRet += key + ": "
+        bottomrow =""
         for type, result in journalLangs.items():
-            percent = str("%.2f" % ((len(result.entries) / len(values.entries)) * 100))
-            toRet += type + " " + str(percent) + "% ,"
+
+            percent = str("%.2f" % ((len(result.entries) / sum) * 100))
+            toRet += type+ ","
+            bottomrow +=str(percent) + ","
         pass
-        toRet += '\n'
+        toRet += '\n'+bottomrow+'\n'
     print(toRet)
     pass
 
@@ -181,18 +187,91 @@ def citationsperTopicperYear(entries):
     toRet = ""
 
     for key, values in entries.items():
-        journalLangs = getTopics(values.entries)
+        journalLangs = getTopics(valu
+
+
+
+
+
+        es.entries)
         toRet += key + ": "
+        bottomrow =""
+
         for type, result in journalLangs.items():
             sum=0
+
             for x in result.entries:
                 try:
                     sum= sum+ x.citations
                 except:
                     pass
 
-            toRet += type + " " + str(sum) + ","
+            toRet += type + ","
+            bottomrow+= str(sum) + ","
         pass
-        toRet += '\n'
+        toRet += '\n'+bottomrow+'\n'
+    print(toRet)
+    pass
+
+def citationsperLaunguage(entries):
+    toRet = ""
+    for key, values in entries.items():
+        journalLangs = getLangs(values.entries)
+        toRet += key + ": "
+        bottomrow =""
+
+        for type, result in journalLangs.items():
+            sum=0
+
+            for x in result.entries:
+                try:
+                    sum= sum+ x.citations
+                except:
+                    pass
+
+            toRet += type + ","
+            bottomrow+= str(sum) + ","
+        pass
+        toRet += '\n'+bottomrow+'\n'
+    print(toRet)
+    pass
+
+def coauthorCitations(entries):
+    toRet = ""
+    Y = 0
+    N = 0
+    for key, values in entries.items():
+
+        for entry in values.entries:
+            if (entry.coAuthor):
+
+                Y += entry.citations
+            else:
+                N += entry.citations
+
+
+    print(" Y {0}   N {1}".format( Y, N))
+    pass
+
+def citationsperLaunguage(entries):
+    toRet = ""
+    journalLangs = getOutletType(entries)
+    for key,langEntries in journalLangs.items():
+        toRet += key + ": "
+        bottomrow =""
+        sum=0
+
+        for x in langEntries.entries:
+
+
+            try:
+                sum= sum+ x.citations
+            except:
+                pass
+        print(key," , ",sum)
+        toRet += key + ","
+        bottomrow+= str(sum) + ","
+        pass
+    toRet += '\n'+bottomrow+'\n'
     print(toRet)
     pass
